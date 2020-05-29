@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}TestCrud{% endblock %}
+
+{% block body %}
+    <h1>TestCrud</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ test_crud.id }}</td>
+            </tr>
+            <tr>
+                <th>Title</th>
+                <td>{{ test_crud.title }}</td>
+            </tr>
+            <tr>
+                <th>Price</th>
+                <td>{{ test_crud.price }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('test_crud_index') }}">back to list</a>
+
+    <a href="{{ path('test_crud_edit', {'id': test_crud.id}) }}">edit</a>
+
+    {{ include('test_crud/_delete_form.html.twig') }}
+{% endblock %}

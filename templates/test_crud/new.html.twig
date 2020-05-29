@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New TestCrud{% endblock %}
+
+{% block body %}
+    <h1>Create new TestCrud</h1>
+
+    {{ include('test_crud/_form.html.twig') }}
+
+    <a href="{{ path('test_crud_index') }}">back to list</a>
+{% endblock %}
