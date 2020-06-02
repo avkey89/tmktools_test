@@ -6,6 +6,7 @@ namespace App\SocialNetwork\Services;
 use App\Security\LoginFormAuthenticator;
 use App\Services\UserService;
 use App\SocialNetwork\Controller\VkController;
+use App\SocialNetwork\Factory\SocialNetworkAuth;
 use App\SocialNetwork\SocialNetwork;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -35,9 +36,11 @@ class UserAuthentication
         $this->userService = $userService;
     }
 
-    public function authorize(SocialNetwork $socialNetwork)
+    public function authorize(SocialNetwork $socialNetwork, SocialNetworkAuth $socialNetworkAuth)
     {
-        $UserInfo = $socialNetwork->getUserInfo(new VkController(), $this->request->getCurrentRequest()->query->get('code'));
+        $UserInfo = $socialNetwork->getUserInfo($socialNetworkAuth, $this->request->getCurrentRequest()->query->all());
+
+        if (!$UserInfo) return false;
 
         $checkUser = $this->checkUser($UserInfo["email"]);
         if ($checkUser) {

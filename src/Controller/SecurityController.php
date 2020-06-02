@@ -5,6 +5,9 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Security\LoginFormAuthenticator;
+use App\SocialNetwork\Connector\GoogleConnector;
+use App\SocialNetwork\Connector\TwitterConnector;
+use App\SocialNetwork\Controller\TwitterController;
 use App\SocialNetwork\Services\UserAuthentication;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -39,22 +42,35 @@ class SecurityController extends AbstractController
 
         $social = new SocialNetwork();
 
-        if($request->query->get('code')) {
+        if($request->query->get('social')) {
+            $socialAuthenticationUser = false;
             try {
+                switch ($request->query->get('social'))
+                {
+                    case 'vk':
+                            $socialAuthenticationUser = $userAuthentication->authorize($social, new VkController());
+                        break;
 
-                $socialAuthenticationUser = $userAuthentication->authorize($social);
-                if ($socialAuthenticationUser) {
-                    return $guardHandler->authenticateUserAndHandleSuccess(
-                        $socialAuthenticationUser,
-                        $request,
-                        $authenticator,
-                        'main' // firewall name in security.yaml
-                    );
+                    case 'twitter':
+                        $socialAuthenticationUser = $userAuthentication->authorize($social, new TwitterController());
+                        break;
+
+                    default:
+                        break;
                 }
-
             } catch (\Exception $e) {
                 dump($e->getMessage());
             }
+
+            if ($socialAuthenticationUser) {
+                return $guardHandler->authenticateUserAndHandleSuccess(
+                    $socialAuthenticationUser,
+                    $request,
+                    $authenticator,
+                    'main' // firewall name in security.yaml
+                );
+            }
+
         }
 
         // get the login error if there is one
@@ -64,6 +80,8 @@ class SecurityController extends AbstractController
 
         $SocialLinks = [];
         $SocialLinks["vk"] = $social->getResponseUrl(new VkConnector());
+        $SocialLinks["google"] = $social->getResponseUrl(new GoogleConnector());
+        $SocialLinks["twitter"] = $social->getResponseUrl(new TwitterConnector());
 
         return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error, 'socialLinks' => $SocialLinks]);
     }

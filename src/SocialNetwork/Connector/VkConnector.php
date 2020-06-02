@@ -15,7 +15,7 @@ class VkConnector implements SocialNetworkInterface
     private $api;
     private $oauth;
     private $clientId;
-    private $redirectUri = 'http://opencode.local/register';
+    private $redirectUri;
     private $responseAccessToken;
     private $responseUserId;
     private $responseUserEmail;
@@ -27,7 +27,7 @@ class VkConnector implements SocialNetworkInterface
         $this->oauth = new VKOAuth();
         $this->clientId = $_ENV["CLIENTIDVK"];
         $this->redirectUri = $_ENV["REDICRECTURIVK"];
-        $this->secretCode = $_ENV["SECTERKEYVK"];
+        $this->secretCode = $_ENV["SECRETKEYVK"];
     }
 
     public function getCode()
@@ -39,7 +39,7 @@ class VkConnector implements SocialNetworkInterface
     public function getAccessToken($code): bool
     {
         // TODO: Implement getAccessToken() method.
-        $response = $this->oauth->getAccessToken($this->clientId, $this->secretCode, $this->redirectUri, $code);
+        $response = $this->oauth->getAccessToken($this->clientId, $this->secretCode, $this->redirectUri, $code["code"]);
 
         if (!$response["access_token"]) {
             return false;

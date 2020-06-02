@@ -33,7 +33,7 @@ class UserService
             )
         );
 
-        if ($fields['typeUser'] == 2) {
+        if (!empty($fields['typeUser']) && $fields['typeUser'] == 2) {
             $this->role = 'ROLE_SALE';
         }
         $role = $this->entityManager->getRepository('App\Entity\Role')
