@@ -7,7 +7,7 @@ security:
         our_db_provider:
             entity:
                 class: App\Entity\User
-                property: login
+                property: email
 
         in_memory: { memory: null }
     firewalls:
@@ -15,16 +15,16 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
-            anonymous: lazy
+            anonymous: true
             pattern: ^/
-            http_basic: ~
+            user_checker: App\Security\UserChecker
             provider: our_db_provider
             guard:
                 authenticators:
                     - App\Security\LoginFormAuthenticator
             logout:
                 path: app_logout
-                target: /
+                # target: /
                 # where to redirect after logout
                 # target: app_any_route
 

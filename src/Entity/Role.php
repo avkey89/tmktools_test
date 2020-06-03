@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\RoleRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=RoleRepository::class)
@@ -24,7 +25,11 @@ class Role
     private $name;
 
     /**
-     * @ORM\Column(type="string", length=10)
+     * @ORM\Column(type="string", length=10, unique=true)
+     * @Assert\Regex(
+     *     pattern="/^ROLE_/",
+     *     message="Short name must start with 'ROLE_'"
+     * )
      */
     private $shortName;
 
@@ -86,5 +91,32 @@ class Role
     public function setActive($active): void
     {
         $this->active = $active;
+    }
+
+    public function __toString() {
+        return $this->name;
+    }
+
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(User $user): self
+    {
+        if (!$this->users->contains($user)) {
+            $this->users[] = $user;
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): self
+    {
+        if ($this->users->contains($user)) {
+            $this->users->removeElement($user);
+        }
+
+        return $this;
     }
 }

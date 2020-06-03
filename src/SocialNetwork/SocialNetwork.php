@@ -11,6 +11,7 @@ class SocialNetwork
 
     public function getResponseUrl(SocialNetworkInterface $socialNetwork)
     {
+        //dump(get_class($socialNetwork));
         return $socialNetwork->getCode();
     }
 

@@ -54,7 +54,7 @@ class User implements UserInterface
 
     public function __construct()
     {
-        $this->active = false;
+        $this->active = true;
         $this->roles = new ArrayCollection();
     }
 
@@ -131,6 +131,11 @@ class User implements UserInterface
         $this->active = $active;
     }
 
+    public function getRole()
+    {
+        return $this->roles;
+    }
+
     public function getRoles()
     {
         $role = [];
@@ -141,13 +146,30 @@ class User implements UserInterface
         return $role;
     }
 
+    public function getRoleObject()
+    {
+        return $this->roles;
+    }
+
     public function addRole(Role $role)
     {
-        if ($this->roles->contains($role)) {
-            return;
+        if (!$this->roles->contains($role)) {
+            $this->roles[] = $role;
+            $role->addUser($this);
         }
 
-        $this->roles[] = $role;
+        return $this;
+    }
+
+    public function removeRole(Role $role)
+    {
+        if ($this->roles->contains($role)) {
+            $this->roles->removeElement($role);
+            $role->removeUser($this);
+        }
+
+        return $this;
+       // $this->tags->removeElement($role);
     }
 
     public function getSalt()
@@ -163,5 +185,10 @@ class User implements UserInterface
     public function eraseCredentials()
     {
         // TODO: Implement eraseCredentials() method.
+    }
+
+    public function isActive()
+    {
+        return $this->getActive();
     }
 }

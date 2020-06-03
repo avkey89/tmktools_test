@@ -1,0 +1,31 @@
+{{ form_start(form) }}
+    <div class="form__body">
+        <div class="form__field">
+            {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder': 'E-mail'}}) }}
+        </div>
+        <br />
+        <div class="form__field">
+            {{ form_widget(form.plainPassword) }}
+        </div>
+        <br />
+        <div class="form__field">
+            {{ form_widget(form.name, {'attr': {'class': 'form-control', 'placeholder': 'Name', 'minlength': '3', 'maxlegth': '50'}}) }}
+        </div>
+        <br />
+        <div class="form__field">
+            {{ form_widget(form.lastName, {'attr': {'class': 'form-control', 'placeholder': 'Surname'}}) }}
+        </div>
+        <br />
+        <div class="form__field">
+            <div class="form__field">{{ form_label(form.role) }}</div>
+            {{ form_widget(form.role, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        <br />
+        <div class="form__field">
+            {{ form_widget(form.active, {'attr': {'checked': 'true'}}) }} Active
+        </div>
+        <br />
+        {{ form_widget(form) }}
+        <button class="btn btn-success">{{ button_label|default('Save') }}</button>
+    </div>
+{{ form_end(form) }}

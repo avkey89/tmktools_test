@@ -1,0 +1,19 @@
+{{ form_start(form) }}
+    <div class="form__body">
+        <div class="form__field">
+            {{ form_widget(form.name, {'attr': {'class': 'form-control', 'placeholder': 'Name role'}}) }}
+        </div>
+        <br />
+        <div class="form__field">
+            {{ form_widget(form.shortName, {'attr': {'class': 'form-control', 'placeholder': 'Short name role', 'maxlength': '10'}}) }}
+            <small>Start must with 'ROLE_'</small>
+        </div>
+        <br />
+        <div class="form__field">
+            {{ form_widget(form.active, {'attr': {'checked': 'true'}}) }} Active
+        </div>
+        <br />
+        {{ form_widget(form) }}
+        <button class="btn btn-success">{{ button_label|default('Save') }}</button>
+    </div>
+{{ form_end(form) }}
